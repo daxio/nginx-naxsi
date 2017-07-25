@@ -1,4 +1,4 @@
-FROM nginx:1.12
+FROM nginx:1.13
 
 LABEL maintainer "tech@abaranovskaya.com"
 
@@ -6,7 +6,6 @@ ENV \
     HOME=/root \
     GNUPGHOME=/root/.gnupg \
     DEBIAN_FRONTEND=noninteractive \
-    NGX_CACHE_PURGE_VERSION=2.4.1 \
     NAXSI_VERSION=0.55.3
 
 # Install basic packages and build tools
@@ -38,7 +37,7 @@ RUN NGINX_VERSION=`nginx -V 2>&1 | grep "nginx version" | awk -F/ '{ print $2}'`
     gpg2 --keyserver hkps.pool.sks-keyservers.net --recv-keys 251A28DE2685AED4 && \
     gpg2 --verify naxsi-${NAXSI_VERSION}.tar.gz.asc naxsi-${NAXSI_VERSION}.tar.gz && \
     
-    rm -r "$GNUPGHOME" nginx-${NGINX_VERSION}.tar.gz.asc naxsi-${NAXSI_VERSION}.tar.gz.asc && \
+    rm -rf "$GNUPGHOME" nginx-${NGINX_VERSION}.tar.gz.asc naxsi-${NAXSI_VERSION}.tar.gz.asc && \
     
     tar -xf nginx-$NGINX_VERSION.tar.gz && \
     mv nginx-$NGINX_VERSION nginx && \
