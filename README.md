@@ -1,6 +1,6 @@
 # NGINX Compiled with NBS System [NAXSI module](https://github.com/nbs-system/naxsi)
 
-This image is based on the official `nginx:stable` image ([see on Dockerhub](https://hub.docker.com/_/nginx/)) and recompiled with the same `./configure` options from vanilla NGINX sources with the addition of `--add-module=naxsi`.
+This image is based on the official `nginx:mainline` image ([see on Dockerhub](https://hub.docker.com/_/nginx/)) and recompiled with the same `./configure` options from vanilla NGINX sources with the addition of `--add-module=naxsi`.
 
 NBS System's [NAXSI module](https://github.com/nbs-system/naxsi) is used;
 
