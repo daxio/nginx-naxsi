@@ -25,27 +25,27 @@ RUN apt-get update && \
 # download and extract sources
 RUN NGINX_VERSION=`nginx -V 2>&1 | grep "nginx version" | awk -F/ '{ print $2}'` && \
     cd /tmp && \
-    wget -O https://nginx.org/download/nginx-$NGINX_VERSION.tar.gz ; \
-    wget -O https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc ; \
-    export GNUPGHOME="$(mktemp -d)" ; \
-    gpg2 --keyserver hkps.pool.sks-keyservers.net --recv-keys 520A9993A1C052F8 ; \
-    gpg2 --verify nginx-${NGINX_VERSION}.tar.gz.asc nginx-${NGINX_VERSION}.tar.gz ; \
+    wget -O https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz && \
+    wget -O https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc && \
+    export GNUPGHOME="$(mktemp -d)" && \
+    gpg2 --keyserver hkps.pool.sks-keyservers.net --recv-keys 520A9993A1C052F8 && \
+    gpg2 --verify nginx-${NGINX_VERSION}.tar.gz.asc nginx-${NGINX_VERSION}.tar.gz && \
   
-    wget https://github.com/nbs-system/naxsi/archive/$NAXSI_VERSION.tar.gz \
-         -O naxsi-$NAXSI_VERSION.tar.gz ; \
-    wget https://github.com/nbs-system/naxsi/releases/download/$NAXSI_VERSION/naxsi-$NAXSI_VERSION.tar.gz.asc ; \
-    gpg2 --keyserver hkps.pool.sks-keyservers.net --recv-keys 251A28DE2685AED4 ; \
+    wget https://github.com/nbs-system/naxsi/archive/${NAXSI_VERSION}.tar.gz && \
+         -O naxsi-${NAXSI_VERSION}.tar.gz && \
+    wget https://github.com/nbs-system/naxsi/releases/download/${NAXSI_VERSION}/naxsi-${NAXSI_VERSION}.tar.gz.asc && \
+    gpg2 --keyserver hkps.pool.sks-keyservers.net --recv-keys 251A28DE2685AED4 && \
     gpg2 --verify naxsi-${NAXSI_VERSION}.tar.gz.asc naxsi-${NAXSI_VERSION}.tar.gz
     
 RUN rm -rf "$GNUPGHOME" nginx-${NGINX_VERSION}.tar.gz.asc naxsi-${NAXSI_VERSION}.tar.gz.asc && \
     
-    tar -xf nginx-$NGINX_VERSION.tar.gz && \
-    mv nginx-$NGINX_VERSION nginx && \
-    rm nginx-$NGINX_VERSION.tar.gz && \
+    tar -xf nginx-${NGINX_VERSION}.tar.gz && \
+    mv nginx-${NGINX_VERSION} nginx && \
+    rm nginx-${NGINX_VERSION}.tar.gz && \
     
-    tar -xf naxsi-$NAXSI_VERSION.tar.gz && \
-    mv naxsi-$NAXSI_VERSION naxsi && \
-    rm naxsi-$NAXSI_VERSION.tar.gz && \
+    tar -xf naxsi-${NAXSI_VERSION}.tar.gz && \
+    mv naxsi-${NAXSI_VERSION} naxsi && \
+    rm naxsi-${NAXSI_VERSION}.tar.gz && \
 
     apt-get purge -y gnupg2 dirmngr && \
     apt-get autoremove -y && \
