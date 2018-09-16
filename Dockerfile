@@ -1,4 +1,4 @@
-FROM nginx:1.13
+FROM nginx:1.15
 
 LABEL maintainer "tech@abaranovskaya.com"
 
@@ -6,7 +6,7 @@ ENV \
     HOME=/root \
     GNUPGHOME=/root/.gnupg \
     DEBIAN_FRONTEND=noninteractive \
-    NAXSI_VERSION=0.55.3
+    NAXSI_VERSION=0.56
 
 # Install basic packages and build tools
 RUN apt-get update && \
@@ -30,15 +30,15 @@ RUN NGINX_VERSION=`nginx -V 2>&1 | grep "nginx version" | awk -F/ '{ print $2}'`
     wget https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc \
         -O nginx.tar.gz.asc && \
     export GNUPGHOME="$(mktemp -d)" && \
-    gpg2 --keyserver hkps.pool.sks-keyservers.net --recv-keys 520A9993A1C052F8 && \
+    gpg2 --keyserver pgp.mit.edu --recv-keys 520A9993A1C052F8 && \
     gpg2 --verify nginx.tar.gz.asc nginx.tar.gz && \
   
     wget https://github.com/nbs-system/naxsi/archive/${NAXSI_VERSION}.tar.gz \
         -O naxsi.tar.gz && \
-    wget https://github.com/nbs-system/naxsi/releases/download/${NAXSI_VERSION}/naxsi-${NAXSI_VERSION}.tar.gz.asc \
-        -O naxsi.tar.gz.asc && \
-    gpg2 --keyserver hkps.pool.sks-keyservers.net --recv-keys 251A28DE2685AED4 && \
-    gpg2 --verify naxsi.tar.gz.asc naxsi.tar.gz && \
+    wget https://github.com/nbs-system/naxsi/releases/download/untagged-afabfc163946baa8036f/naxsi-${NAXSI_VERSION}.tar.gz.sig \
+        -O naxsi.tar.gz.sig && \
+    gpg2 --keyserver pgp.mit.edu --recv-keys 251A28DE2685AED4 && \
+    gpg2 --verify naxsi.tar.gz.sig naxsi.tar.gz && \
     
     tar -xvf nginx.tar.gz && \
     mv nginx-${NGINX_VERSION} nginx && \
@@ -51,7 +51,7 @@ RUN NGINX_VERSION=`nginx -V 2>&1 | grep "nginx version" | awk -F/ '{ print $2}'`
     apt-get purge -y gnupg2 dirmngr && \
     apt-get autoremove -y && \
     apt-get clean && \
-    rm -rf /var/lib/apt/lists/* "$GNUPGHOME" nginx.tar.gz.asc naxsi.tar.gz.asc
+    rm -rf /var/lib/apt/lists/* "$GNUPGHOME" nginx.tar.gz.asc naxsi.tar.gz.sig
     
 # configure and build
 RUN cd /tmp/nginx && \
