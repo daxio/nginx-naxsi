@@ -1,4 +1,4 @@
-FROM nginx:1.15
+FROM nginx:1.17
 
 LABEL maintainer "tech@abaranovskaya.com"
 
@@ -30,24 +30,20 @@ RUN NGINX_VERSION=`nginx -V 2>&1 | grep "nginx version" | awk -F/ '{ print $2}'`
     wget https://nginx.org/download/nginx-${NGINX_VERSION}.tar.gz.asc \
         -O nginx.tar.gz.asc && \
     export GNUPGHOME="$(mktemp -d)" && \
-    gpg2 --keyserver pgp.mit.edu --recv-keys 520A9993A1C052F8 && \
+    gpg2 --keyserver ha.pool.sks-keyservers.net --recv-keys 520A9993A1C052F8 && \
     gpg2 --verify nginx.tar.gz.asc nginx.tar.gz && \
-  
     wget https://github.com/nbs-system/naxsi/archive/${NAXSI_VERSION}.tar.gz \
         -O naxsi.tar.gz && \
-    wget https://github.com/nbs-system/naxsi/releases/download/untagged-afabfc163946baa8036f/naxsi-${NAXSI_VERSION}.tar.gz.sig \
+    wget https://github.com/nbs-system/naxsi/releases/download/0.56/naxsi-${NAXSI_VERSION}.tar.gz.asc \
         -O naxsi.tar.gz.sig && \
-    gpg2 --keyserver pgp.mit.edu --recv-keys 251A28DE2685AED4 && \
+    gpg2 --keyserver ha.pool.sks-keyservers.net --recv-keys 251A28DE2685AED4 && \
     gpg2 --verify naxsi.tar.gz.sig naxsi.tar.gz && \
-    
     tar -xvf nginx.tar.gz && \
     mv nginx-${NGINX_VERSION} nginx && \
     rm nginx.tar.gz && \
-    
     tar -xvf naxsi.tar.gz && \
     mv naxsi-${NAXSI_VERSION} naxsi && \
     rm naxsi.tar.gz && \
-
     apt-get purge -y gnupg2 dirmngr && \
     apt-get autoremove -y && \
     apt-get clean && \
