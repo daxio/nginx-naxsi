@@ -1,4 +1,4 @@
-FROM nginx:1.17
+FROM nginx:1.19
 
 LABEL maintainer "tech@abaranovskaya.com"
 
@@ -6,7 +6,7 @@ ENV \
     HOME=/root \
     GNUPGHOME=/root/.gnupg \
     DEBIAN_FRONTEND=noninteractive \
-    NAXSI_VERSION=0.56
+    NAXSI_VERSION=1.3
 
 # Install basic packages and build tools
 RUN apt-get update && \
@@ -34,9 +34,9 @@ RUN NGINX_VERSION=`nginx -V 2>&1 | grep "nginx version" | awk -F/ '{ print $2}'`
     gpg2 --verify nginx.tar.gz.asc nginx.tar.gz && \
     wget https://github.com/nbs-system/naxsi/archive/${NAXSI_VERSION}.tar.gz \
         -O naxsi.tar.gz && \
-    wget https://github.com/nbs-system/naxsi/releases/download/0.56/naxsi-${NAXSI_VERSION}.tar.gz.asc \
+    wget https://github.com/nbs-system/naxsi/releases/download/${NAXSI_VERSION}/naxsi-${NAXSI_VERSION}.tar.gz.asc \
         -O naxsi.tar.gz.sig && \
-    gpg2 --keyserver ha.pool.sks-keyservers.net --recv-keys 251A28DE2685AED4 && \
+    gpg2 --keyserver ha.pool.sks-keyservers.net --recv-keys 498C46FF087EDC36E7EAF9D445414A82A9B22D78 && \
     gpg2 --verify naxsi.tar.gz.sig naxsi.tar.gz && \
     tar -xvf nginx.tar.gz && \
     mv nginx-${NGINX_VERSION} nginx && \
